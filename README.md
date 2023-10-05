@@ -15,8 +15,6 @@ This is a web application designed to help users discover and explore a wide var
 - **CSS:** For styling and layout.
 - **JavaScript:** For client-side interactivity and dynamic content.
 - **Python:** For backend development.
-- **Flask:** A Python web framework used to create the backend and handle server-side logic.
-- **MySQL:** For database storage of recipes and related data.
 - **API Integration:** We use external recipe APIs to fetch recipe data.
 - **Git:** For version control and collaborative development.
 
