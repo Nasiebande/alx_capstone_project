@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form method="POST">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" required><br><br>
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" required><br><br>
+        <button type="submit">Login</button>
+    </form>
+    <h2>{{ recipe["name"] }}</h2>
+<p>Cuisine: {{ recipe["cuisine"] }}</p>
+<p>Dish Type: {{ recipe["dish_type"] }}</p>
+<h3>Ingredients</h3>
+<ul>
+    {% for ingredient in recipe["ingredients"] %}
+        <li>{{ ingredient }}</li>
+    {% endfor %}
+</ul>
+<h3>Instructions</h3>
+<ol>
+    {% for instruction in recipe["instructions"] %}
+        <li>{{ instruction }}</li>
+    {% endfor %}
+</ol>
+<p>Cooking Time: {{ recipe["cooking_time"] }} minutes</p>
+
+<!-- Ratings and Reviews -->
+<h3>Ratings and Reviews</h3>
+<div class="ratings">
+    Average Rating: {{ recipe["average_rating"] }}
+</div>
+<div class="reviews">
+    <ul>
+        {% for review in recipe["reviews"] %}
+            <li>{{ review["user"] }} says: {{ review["comment"] }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- User Rating and Review Form -->
+<form method="POST" action="/recipe/{{ recipe["id"] }}/rate">
+    <label for="rating">Rating (1-5):</label>
+    <input type="number" name="rating" min="1" max="5" required>
+    <br>
+    <label for="comment">Review:</label>
+    <textarea name="comment" rows="4" required></textarea>
+    <br>
+    <button type="submit">Submit Rating & Review</button>
+</form>
+</body>
+</html>

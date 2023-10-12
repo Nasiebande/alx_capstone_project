@@ -15,6 +15,10 @@ header {
     padding: 20px;
 }
 
+@media (min-width: 768px) {
+    /* Styles for tablets and larger screens */
+}
+
 .search-bar {
     text-align: center;
 }
