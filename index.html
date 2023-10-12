@@ -13,10 +13,15 @@
     <div class="container">
         <div class="search-bar">
             <form method="POST" action="/search">
+                <select name="search-type">
+                    <option value="name">Dish Name</option>
+                    <option value="ingredients">Ingredients</option>
+                    <option value="cuisine">Cuisine</option>
+                </select>
                 <input type="text" name="search-term" placeholder="Search for recipes">
                 <button type="submit">Search</button>
             </form>
-        </div>
+        </div>        
         <div class="recipe-list">
             {% for recipe in recipes %}
             <div class="recipe-card">
