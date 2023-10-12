@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <title>Recipe Finder</title>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
@@ -12,16 +12,22 @@
     </header>
     <div class="container">
         <div class="search-bar">
-            <input type="text" id="search-input" placeholder="Search for recipes">
-            <button id="search-button">Search</button>
+            <form method="POST" action="/search">
+                <input type="text" name="search-term" placeholder="Search for recipes">
+                <button type="submit">Search</button>
+            </form>
         </div>
         <div class="recipe-list">
-            <!-- Recipes will be displayed here -->
+            {% for recipe in recipes %}
+            <div class="recipe-card">
+                <h2>{{ recipe["name"] }}</h2>
+                <p>Ingredients: {{ recipe["ingredients"] }}</p>
+            </div>
+            {% endfor %}
         </div>
     </div>
     <footer>
         <p>&copy; 2023 Recipe Finder App</p>
     </footer>
-    <script src="script.js"></script>
 </body>
 </html>
