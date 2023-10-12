@@ -25,11 +25,13 @@
         <div class="recipe-list">
             {% for recipe in recipes %}
             <div class="recipe-card">
-                <h2>{{ recipe["name"] }}</h2>
-                <p>Ingredients: {{ recipe["ingredients"] }}</p>
+                <h2>{{ recipe["recipe"]["label"] }}</h2>
+                <p>Cuisine: {{ recipe["recipe"]["cuisineType"] }}</p>
+                <p>Dish Type: {{ recipe["recipe"]["dishType"] }}</p>
+                <a href="/recipe/{{ loop.index }}">View Details</a>
             </div>
             {% endfor %}
-        </div>
+        </div>        
     </div>
     <footer>
         <p>&copy; 2023 Recipe Finder App</p>

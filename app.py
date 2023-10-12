@@ -10,6 +10,15 @@ EDAMAM_APP_KEY = "cb1eb46dea31ba0c46fb7f96b463fb7d"
 def index():
     return render_template("index.html")
 
+@app.route("/recipe/<int:index>")
+def recipe_details(index):
+    # Ensure the index is within the range of the recipes list
+    if 0 < index <= len(recipes):
+        recipe = recipes[index - 1]
+        return render_template("recipe_detail.html", recipe=recipe)
+    else:
+        return "Recipe not found", 404
+
 @app.route("/search", methods=["POST"])
 def search():
     search_term = request.form.get("search-term").lower()
