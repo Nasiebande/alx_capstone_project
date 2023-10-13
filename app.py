@@ -1,9 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for
 import requests
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from auth import register_user, verify_password
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+app.secret_key = os.getenv("SECRET_KEY")
 
 # Initialize Flask-Login
 login_manager = LoginManager()
@@ -21,10 +26,6 @@ class User(UserMixin):
         self.id = id
         self.favorite_recipes = []
         self.shopping_list = []
-
-class User(UserMixin):
-    def __init__(self, id):
-        self.id = id
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -67,6 +68,12 @@ def recipe_details(index):
     else:
         return "Recipe not found", 404
     
+@app.route("/register", methods=["POST"])
+def registration():
+    username = request.form.get("username")
+    password = request.form.get("password")
+    register_user(username, password, users)
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -149,7 +156,7 @@ def search():
         data = response.json()
         recipes = data.get("hits", [])
     else:
-        recipes = []  # Handle the error case gracefully
+        recipes = []
 
     return render_template("index.html", recipes=recipes)
 
