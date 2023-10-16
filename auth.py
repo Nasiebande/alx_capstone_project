@@ -1,5 +1,5 @@
 from app import db
-from models import User  # Assuming you've named the model file as models.py
+from models import User
 
 def register_user(username, password):
     # Check if the username already exists

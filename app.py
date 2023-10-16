@@ -1,31 +1,58 @@
-from collections import UserString
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from auth import verify_password
+from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
+from models import User
+from auth import register_user
 import os
+import requests
 
 load_dotenv()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydatabase.db'  # Use SQLite database (you can change to another DB)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydatabase.db'
 app.secret_key = os.getenv("SECRET_KEY")
 
-db = SQLAlchemy(app)  # Initialize the database
+db = SQLAlchemy(app)
 
-# Initialize Flask-Login
 login_manager = LoginManager()
 login_manager.login_view = "login"
 login_manager.init_app(app)
 
+# Define User model
 class User(UserMixin, db.Model):
-    id = db.Column(db.String, primary_key=True)
-    password = db.Column(db.String)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+    favorite_recipes = db.relationship('Recipe', secondary='user_favorite_recipes')
+    shopping_list = db.relationship('Recipe', secondary='user_shopping_list')
+
+class Recipe(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    ingredients = db.Column(db.String(200), nullable=False)
+    cuisine = db.Column(db.String(100))
+    dish_type = db.Column(db.String(100))
+    cooking_time = db.Column(db.Integer)
+    ratings = db.relationship('Rating', backref='recipe')
+    reviews = db.relationship('Review', backref='recipe')
+
+class Rating(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    rating = db.Column(db.Float, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'))
+
+class Review(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    comment = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'))
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(user_id)
+    return User.query.get(int(user_id))
 
 EDAMAM_APP_ID = "f081e0c8"
 EDAMAM_APP_KEY = "cb1eb46dea31ba0c46fb7f96b463fb7d"
@@ -54,7 +81,8 @@ recipes = [
 
 @app.route("/")
 def index():
-    return render_template("index.html", recipes=recipes)  # Pass the 'recipes' variable to the template
+    recipes = Recipe.query.all()
+    return render_template("index.html", recipes=recipes)
 
 @app.route("/recipe/<int:index>")
 def recipe_details(index):
@@ -69,20 +97,30 @@ def recipe_details(index):
 def registration():
     username = request.form.get("username")
     password = request.form.get("password")
-    result = register_user(username, password, users)
-    if result == "Registration successful":
-        return redirect(url_for("login"))
-    return result  # Return the registration result to the user
+
+    # Check if the user already exists
+    user = User.query.filter_by(id=username).first()
+    if user:
+        return "Username already exists"
+
+    # Create a new user and add it to the database
+    new_user = User(id=username, password=password)
+    db.session.add(new_user)
+    db.session.commit()
+
+    return "Registration successful"
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
-        if verify_password(username, password, users):
-            user = User(username)
+
+        user = User.query.filter_by(id=username).first()
+        if user and check_password_hash(user.password, password):
             login_user(user)
             return redirect(url_for("index"))
+    
     return render_template("login.html")
 
 @app.route("/logout")
