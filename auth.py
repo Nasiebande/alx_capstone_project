@@ -1,14 +1,20 @@
-# auth.py
+from app import db
+from models import User  # Assuming you've named the model file as models.py
 
-import bcrypt
+def register_user(username, password):
+    # Check if the username already exists
+    user = User.query.filter_by(id=username).first()
+    if user is not None:
+        return "Username already exists"
+    
+    # Create a new User instance and save it to the database
+    new_user = User(id=username, password=password)
+    db.session.add(new_user)
+    db.session.commit()
+    return "Registration successful"
 
-def register_user(username, password, users):
-    salt = bcrypt.gensalt()
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
-    users[username] = {'password': hashed_password}
-
-def verify_password(username, password, users):
-    if username in users:
-        stored_password = users[username]['password']
-        return bcrypt.checkpw(password.encode('utf-8'), stored_password)
+def verify_password(username, password):
+    user = User.query.filter_by(id=username).first()
+    if user and user.password == password:
+        return True
     return False

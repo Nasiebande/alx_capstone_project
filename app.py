@@ -1,35 +1,31 @@
+from collections import UserString
 from flask import Flask, render_template, request, redirect, url_for
-import requests
+from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from auth import register_user, verify_password
+from auth import verify_password
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydatabase.db'  # Use SQLite database (you can change to another DB)
 app.secret_key = os.getenv("SECRET_KEY")
+
+db = SQLAlchemy(app)  # Initialize the database
 
 # Initialize Flask-Login
 login_manager = LoginManager()
 login_manager.login_view = "login"
 login_manager.init_app(app)
 
-# Mock user data (in a real application, you would use a database)
-users = {
-    "user1": {"password": "password1"},
-    "user2": {"password": "password2"}
-}
-
-class User(UserMixin):
-    def __init__(self, id):
-        self.id = id
-        self.favorite_recipes = []
-        self.shopping_list = []
+class User(UserMixin, db.Model):
+    id = db.Column(db.String, primary_key=True)
+    password = db.Column(db.String)
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User(user_id)
+    return User.query.get(user_id)
 
 EDAMAM_APP_ID = "f081e0c8"
 EDAMAM_APP_KEY = "cb1eb46dea31ba0c46fb7f96b463fb7d"
@@ -41,6 +37,7 @@ recipes = [
         "ingredients": "Pasta, eggs, bacon, Parmesan cheese",
         "cuisine": "Italian",
         "dish_type": "Pasta",
+        "cooking_time": 30,
         "ratings": [],
         "reviews": []
     },
@@ -49,22 +46,22 @@ recipes = [
         "ingredients": "Chicken, vegetables, soy sauce, ginger",
         "cuisine": "Chinese",
         "dish_type": "Stir-Fry",
+        "cooking_time": 45,
         "ratings": [],
         "reviews": []
     },
-    # Add more recipe objects here
 ]
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", recipes=recipes)  # Pass the 'recipes' variable to the template
 
 @app.route("/recipe/<int:index>")
 def recipe_details(index):
     # Ensure the index is within the range of the recipes list
     if 0 < index <= len(recipes):
         recipe = recipes[index - 1]
-        return render_template("recipe_detail.html", recipe=recipe)
+        return render_template("recipe_detail.html", recipe=recipe)  # Pass the 'recipe' variable to the template
     else:
         return "Recipe not found", 404
     
@@ -72,14 +69,17 @@ def recipe_details(index):
 def registration():
     username = request.form.get("username")
     password = request.form.get("password")
-    register_user(username, password, users)
+    result = register_user(username, password, users)
+    if result == "Registration successful":
+        return redirect(url_for("login"))
+    return result  # Return the registration result to the user
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
-        if username in users and users[username]["password"] == password:
+        if verify_password(username, password, users):
             user = User(username)
             login_user(user)
             return redirect(url_for("index"))
@@ -101,7 +101,7 @@ def add_favorite(index):
     else:
         return "Recipe not found", 404
 
-@app.route("/remove_favorite/<int:index>")
+@app.route("/remove_favorite/<int=index>")
 @login_required
 def remove_favorite(index):
     if 0 < index <= len(current_user.favorite_recipes):

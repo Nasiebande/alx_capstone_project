@@ -33,16 +33,18 @@
                 <p>Dish Type: {{ recipe["recipe"]["dishType"] }}</p>
                 <a href="/recipe/{{ loop.index }}">View Details</a>
             </div>
-            {% endfor %}
+            {% for recipe in recipes %}
             <div class="recipe-card">
-                <h2>{{ recipe["recipe"]["label"] }}</h2>
-                <p>Cuisine: {{ recipe["recipe"]["cuisineType"] }}</p>
-                <p>Dish Type: {{ recipe["recipe"]["dishType"] }}</p>
+                <h2>{{ recipe["name"] }}</h2>
+                <p>Cuisine: {{ recipe["cuisine"] }}</p>
+                <p>Dish Type: {{ recipe["dish_type"] }}</p>
                 <a href="/recipe/{{ loop.index }}">View Details</a>
                 {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('add_to_favorites', recipe_index=loop.index) }}">Add to Favorites</a>
-                    <a href="{{ url_for('add_to_shopping_list', recipe_index=loop.index) }}">Add to Shopping List</a>
+                    <a href="{{ url_for('add_favorite', index=loop.index) }}">Add to Favorites</a>
+                    <a href="{{ url_for('add_to_shopping_list', index=loop.index) }}">Add to Shopping List</a>
                 {% endif %}
+            </div>
+        {% endfor %}
             </div>
         </div>        
     </div>
