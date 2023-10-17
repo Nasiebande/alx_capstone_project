@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+</head>
+<body>
+    <h1>Search Results</h1>
+    
+    <div class="recipe-list">
+        {% for recipe in recipes %}
+        <div class="recipe-card">
+            <h2>{{ recipe.recipe.label }}</h2>
+            <p>Cuisine: {{ recipe.recipe.cuisineType }}</p>
+            <p>Dish Type: {{ recipe.recipe.dishType }}</p>
+            <a href="{{ url_for('recipe_details', index=loop.index) }}">View Details</a>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <a href="{{ url_for('index') }}">Back to Home</a>
+</body>
+</html>

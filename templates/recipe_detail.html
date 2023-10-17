@@ -28,6 +28,17 @@
                 {% endfor %}
             </ol>
             <p>Cooking Time: {{ recipe["totalTime"] }} minutes</p>
+            <h3>Ratings and Reviews</h3>
+            <form method="POST" action="/add_review">
+                <input type="hidden" name="recipe_id" value="{{ recipe_id }}">
+                <label for="rating">Rating (1-5):</label>
+                <input type="number" name="rating" min="1" max="5" required>
+                <br>
+                <label for="review">Review:</label>
+                <textarea name="review" rows="4" required></textarea>
+                <br>
+                <button type="submit">Submit Review</button>
+            </form>
         </div>
     </div>
     <footer>
