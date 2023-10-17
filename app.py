@@ -109,8 +109,12 @@ def recipe_details(index):
 def add_favorite(index):
     if 0 < index <= len(recipes):
         recipe = recipes[index - 1]
+
+        # Add the recipe to the user's favorite recipes
         current_user.favorite_recipes.append(recipe)
-        return redirect(url_for("index"))
+
+        # Redirect to the recipe details page with an anchor link to the added recipe
+        return redirect(url_for("recipe_details", index=index, anchor="favorites"))
     else:
         return "Recipe not found", 404
 
