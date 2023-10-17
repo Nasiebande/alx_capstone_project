@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import requests
+import os
 
 app = Flask(__name__)
-app.secret_key = 'b4ZvDq#8vUT^b9^*ac$!k9'
+app.secret_key = os.getenv("SECRET_KEY")
 
 # Initialize Flask-Login
 login_manager = LoginManager()
