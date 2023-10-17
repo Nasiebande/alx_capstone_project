@@ -7,5 +7,6 @@
         <p>Cuisine: {{ recipe.recipe.cuisineType }}</p>
         <p>Cooking Time: {{ recipe.recipe.totalTime }} minutes</p>
         <a href="{{ url_for('recipe_details', index=loop.index, image_url=recipe.recipe.image) }}">View Details</a>
+        <a href="{{ recipe.recipe.url }}" target="_blank">View Instructions</a>
     </div>
 </div>
