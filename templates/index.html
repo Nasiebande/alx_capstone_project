@@ -12,6 +12,13 @@
         {% if current_user.is_authenticated %}
             <a href="{{ url_for('logout') }}">Logout</a>
         {% endif %}
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li> <!-- Link to the home page -->
+                <li><a href="/favorites">My Favorites</a></li>
+                <li><a href="/shopping-list">Shopping List</a></li>
+            </ul>
+        </nav>
     </header>
     <div class="container">
         <div class="search-bar">
@@ -61,15 +68,10 @@
     
         function addToFavorites(event) {
             const recipeIndex = event.target.getAttribute("data-recipe-index");
-            // Implement logic to add the recipe at index 'recipeIndex' to the user's favorites
-            // You can use JavaScript to manipulate the DOM to indicate that the recipe is now in favorites
-            // You may also use local storage or send this information to the server to save the user's favorites.
         }
     
         function addToShoppingList(event) {
             const recipeIndex = event.target.getAttribute("data-recipe-index");
-            // Implement logic to add the recipe at index 'recipeIndex' to the user's shopping list
-            // Similar to favorites, you can use JavaScript to indicate that the recipe is now in the shopping list
         }
     </script>
 </body>

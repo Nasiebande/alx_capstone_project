@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Recipe Finder</title>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Recipe Finder</h1>
+    </header>
+    <div class="container">
+        <div class="home-content">
+            <p>Welcome to Recipe Finder, your source for discovering new and delicious recipes.</p>
+            <p>Start your culinary journey today by searching for your favorite recipes.</p>
+            <a href="{{ url_for('index') }}">Get Started</a>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2023 Recipe Finder App</p>
+    </footer>
+</body>
+</html>
