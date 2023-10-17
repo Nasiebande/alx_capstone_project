@@ -4,7 +4,8 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 from models import User
-from auth import register_user
+from database import db
+from auth import verify_password
 import os
 import requests
 
@@ -139,7 +140,7 @@ def add_favorite(index):
     else:
         return "Recipe not found", 404
 
-@app.route("/remove_favorite/<int=index>")
+@app.route("/remove_favorite/<int:index>")
 @login_required
 def remove_favorite(index):
     if 0 < index <= len(current_user.favorite_recipes):
