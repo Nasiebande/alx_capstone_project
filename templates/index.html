@@ -47,5 +47,30 @@
     <footer>
         <p>&copy; 2023 Recipe Finder App</p>
     </footer>
+    <script>
+        const favoriteButtons = document.querySelectorAll(".add-to-favorites");
+        const shoppingListButtons = document.querySelectorAll(".add-to-shopping-list");
+    
+        favoriteButtons.forEach(button => {
+            button.addEventListener("click", addToFavorites);
+        });
+    
+        shoppingListButtons.forEach(button => {
+            button.addEventListener("click", addToShoppingList);
+        });
+    
+        function addToFavorites(event) {
+            const recipeIndex = event.target.getAttribute("data-recipe-index");
+            // Implement logic to add the recipe at index 'recipeIndex' to the user's favorites
+            // You can use JavaScript to manipulate the DOM to indicate that the recipe is now in favorites
+            // You may also use local storage or send this information to the server to save the user's favorites.
+        }
+    
+        function addToShoppingList(event) {
+            const recipeIndex = event.target.getAttribute("data-recipe-index");
+            // Implement logic to add the recipe at index 'recipeIndex' to the user's shopping list
+            // Similar to favorites, you can use JavaScript to indicate that the recipe is now in the shopping list
+        }
+    </script>
 </body>
 </html>
