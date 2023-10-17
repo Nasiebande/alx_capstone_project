@@ -75,9 +75,8 @@ def logout():
 
 @app.route("/search", methods=["POST"])
 def search():
-    search_term = request.form.get("search-term").lower()
-    search_type = request.form.get("search-type")
-    
+    search_term = request.form.get("search-term")
+
     edamam_url = "https://api.edamam.com/search"
     params = {
         "q": search_term,
@@ -99,7 +98,8 @@ def recipe_details(index):
     # Ensure the index is within the range of the recipes list
     if 0 < index <= len(recipes):
         recipe = recipes[index - 1]
-        return render_template("recipe_detail.html", recipe=recipe)
+        image_url = request.args.get("image_url")
+        return render_template("recipe_detail.html", recipe=recipe, image_url=image_url)
     else:
         return "Recipe not found", 404
     

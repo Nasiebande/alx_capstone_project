@@ -12,6 +12,9 @@
     </header>
     <div class="container">
         <div class="recipe-details">
+            <div class="recipe-image">
+                <img src="{{ image_url }}" alt="{{ recipe['name'] }}">
+            </div>
             <h2>{{ recipe["name"] }}</h2>
             <p>Cuisine: {{ recipe["cuisine"] }}</p>
             <p>Dish Type: {{ recipe["dish_type"] }}</p>

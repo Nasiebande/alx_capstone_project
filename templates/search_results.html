@@ -2,12 +2,33 @@
 <html>
 <head>
     <title>Search Results</title>
+    <style>
+        .recipe-card {
+            display: flex;
+            border: 1px solid #ccc;
+            margin: 10px;
+            padding: 10px;
+        }
+        .recipe-image {
+            flex: 1;
+            max-width: 200px;
+        }
+        .recipe-image img {
+            max-width: 100%;
+            height: auto;
+        }
+        .recipe-details {
+            flex: 2;
+            padding: 0 20px;
+        }
+    </style>
 </head>
 <body>
     <h1>Search Results</h1>
     
     <div class="recipe-list">
         {% for recipe in recipes %}
+            {% include 'recipe_card.html' %}
         <div class="recipe-card">
             <h2>{{ recipe.recipe.label }}</h2>
             <p>Cuisine: {{ recipe.recipe.cuisineType }}</p>
