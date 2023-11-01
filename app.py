@@ -11,6 +11,14 @@ login_manager = LoginManager()
 login_manager.login_view = "login"
 login_manager.init_app(app)
 
+# Define a user loader function
+@login_manager.user_loader
+def load_user(user_id):
+    # Load your User object here based on the user_id
+    # Return the User object or None if the user doesn't exist
+    user = User.query.get(user_id) 
+    return user
+
 users = {
     "user1": {"password": "password1"},
     "user2": {"password": "password2"}
@@ -22,35 +30,10 @@ class User(UserMixin):
         self.favorite_recipes = []
         self.shopping_list = []
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User(user_id)
-
 EDAMAM_APP_ID = "f081e0c8"
 EDAMAM_APP_KEY = "cb1eb46dea31ba0c46fb7f96b463fb7d"
 
-# Mock recipe data
-recipes = [
-    {
-        "name": "Pasta Carbonara",
-        "ingredients": "Pasta, eggs, bacon, Parmesan cheese",
-        "cuisine": "Italian",
-        "dish_type": "Pasta",
-        "cooking_time": 30,
-        "ratings": [],
-        "reviews": []
-    },
-    {
-        "name": "Chicken Stir-Fry",
-        "ingredients": "Chicken, vegetables, soy sauce, ginger",
-        "cuisine": "Chinese",
-        "dish_type": "Stir-Fry",
-        "cooking_time": 45,
-        "ratings": [],
-        "reviews": []
-    },
-    # Add more recipe objects here
-]
+recipes = []
 
 @app.route("/")
 def index():
@@ -75,6 +58,7 @@ def logout():
 
 @app.route("/search", methods=["POST"])
 def search():
+    global recipes
     search_term = request.form.get("search-term")
 
     edamam_url = "https://api.edamam.com/search"
@@ -95,25 +79,19 @@ def search():
 
 @app.route("/recipe/<int:index>")
 def recipe_details(index):
-    # Ensure the index is within the range of the recipes list
     if 0 < index <= len(recipes):
         recipe = recipes[index - 1]
-        image_url = request.args.get("image_url")
+        image_url = recipe.get("recipe", {}).get("image", "")
         return render_template("recipe_detail.html", recipe=recipe, image_url=image_url)
     else:
         return "Recipe not found", 404
-    
-# Add routes for adding and removing recipes from favorites and shopping list
+
 @app.route("/add_favorite/<int:index>")
 @login_required
 def add_favorite(index):
     if 0 < index <= len(recipes):
         recipe = recipes[index - 1]
-
-        # Add the recipe to the user's favorite recipes
         current_user.favorite_recipes.append(recipe)
-
-        # Redirect to the recipe details page with an anchor link to the added recipe
         return redirect(url_for("recipe_details", index=index, anchor="favorites"))
     else:
         return "Recipe not found", 404
@@ -136,7 +114,6 @@ def add_to_shopping_list(index):
         return redirect(url_for("index"))
     else:
         return "Recipe not found", 404
-    
-    return render_template("index.html", recipes=recipes)
+
 if __name__ == "__main__":
     app.run(debug=True)

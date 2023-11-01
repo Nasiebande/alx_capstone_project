@@ -6,7 +6,7 @@
         <h2>{{ recipe.recipe.label }}</h2>
         <p>Cuisine: {{ recipe.recipe.cuisineType }}</p>
         <p>Cooking Time: {{ recipe.recipe.totalTime }} minutes</p>
-        <a href="{{ url_for('recipe_details', index=loop.index, image_url=recipe.recipe.image) }}">View Details</a>
+        <a href="{{ url_for('recipe_details', index=loop.index) }}">View Details</a>
         <a href="{{ recipe.recipe.url }}" target="_blank">View Instructions</a>
         <button class="add-to-favorites" data-recipe-index="{{ loop.index }}">Add to Favorites</button>
         <button class="add-to-shopping-list" data-recipe-index="{{ loop.index }}">Add to Shopping List</button>

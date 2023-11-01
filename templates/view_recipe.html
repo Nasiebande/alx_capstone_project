@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recipe Details</title>
+</head>
+<body>
+    <h1>Recipe Details</h1>
+    <p><a href="{{ url_for('index') }}">Back to Home</a></p>
+
+    <h2>{{ recipe.label }}</h2>
+    <p>Cuisine: {{ recipe.cuisineType }}</p>
+    <p>Dish Type: {{ recipe.dishType }}</p>
+    <p>Total Time: {{ recipe.totalTime }} minutes</p>
+
+    <h3>Ingredients:</h3>
+    <ul>
+        {% for ingredient in recipe.ingredients %}
+            <li>{{ ingredient.text }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Instructions:</h3>
+    <ol>
+        {% for step in recipe.instructions %}
+            <li>{{ step.step }}</li>
+        {% endfor %}
+    </ol>
+
+    <a href="{{ recipe.url }}" target="_blank">View Full Recipe</a>
+
+    <!-- Add to Favorites button -->
+    <form action="{{ url_for('add_to_favorites', index=recipe.index) }}" method="post">
+        <button type="submit">Add to Favorites</button>
+    </form>
+
+    <!-- Add to Shopping List button -->
+    <form action="{{ url_for('add_to_shopping_list', index=recipe.index) }}" method="post">
+        <button type="submit">Add to Shopping List</button>
+    </form>
+</body>
+</html>
