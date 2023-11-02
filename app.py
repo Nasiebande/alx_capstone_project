@@ -14,8 +14,6 @@ login_manager.init_app(app)
 # Define a user loader function
 @login_manager.user_loader
 def load_user(user_id):
-    # Load your User object here based on the user_id
-    # Return the User object or None if the user doesn't exist
     user = User.query.get(user_id) 
     return user
 
