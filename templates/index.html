@@ -50,7 +50,6 @@
                 </form>
             </div>            
         </div>
-    </div>
     <footer>
         <p>&copy; 2023 Recipe Finder App</p>
     </footer>
@@ -68,10 +67,30 @@
     
         function addToFavorites(event) {
             const recipeIndex = event.target.getAttribute("data-recipe-index");
+    
+            fetch(`/add_to_favorites/${recipeIndex}`, {
+                method: "POST",
+            }).then(response => {
+                if (response.status === 200) {
+                    alert("Recipe added to favorites!");
+                } else {
+                    alert("Failed to add to favorites");
+                }
+            });
         }
     
         function addToShoppingList(event) {
             const recipeIndex = event.target.getAttribute("data-recipe-index");
+    
+            fetch(`/add_to_shopping_list/${recipeIndex}`, {
+                method: "POST",
+            }).then(response => {
+                if (response.status === 200) {
+                    alert("Recipe added to shopping list!");
+                } else {
+                    alert("Failed to add to shopping list");
+                }
+            });
         }
     </script>
 </body>

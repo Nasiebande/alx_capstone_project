@@ -84,7 +84,7 @@ def recipe_details(index):
     else:
         return "Recipe not found", 404
 
-@app.route("/add_favorite/<int:index>")
+@app.route("/add_to_favorites/<int:index>", methods=["POST"])
 @login_required
 def add_favorite(index):
     if 0 < index <= len(recipes):
@@ -94,7 +94,7 @@ def add_favorite(index):
     else:
         return "Recipe not found", 404
 
-@app.route("/remove_favorite/<int:index>")
+@app.route("/add_to_shopping_list/<int:index>", methods=["POST"])
 @login_required
 def remove_favorite(index):
     if 0 < index <= len(current_user.favorite_recipes):
