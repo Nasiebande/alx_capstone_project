@@ -5,13 +5,16 @@
 </head>
 <body>
     <h1>Recipe Details</h1>
+    <!-- Link to go back to the home page -->
     <p><a href="{{ url_for('index') }}">Back to Home</a></p>
 
+    <!-- Display recipe details -->
     <h2>{{ recipe.label }}</h2>
     <p>Cuisine: {{ recipe.cuisineType }}</p>
     <p>Dish Type: {{ recipe.dishType }}</p>
     <p>Total Time: {{ recipe.totalTime }} minutes</p>
 
+    <!-- List of ingredients -->
     <h3>Ingredients:</h3>
     <ul>
         {% for ingredient in recipe.ingredients %}
@@ -19,6 +22,7 @@
         {% endfor %}
     </ul>
 
+    <!-- List of instructions -->
     <h3>Instructions:</h3>
     <ol>
         {% for step in recipe.instructions %}
@@ -26,12 +30,15 @@
         {% endfor %}
     </ol>
 
+    <!-- Link to view the full recipe on an external website (opens in a new tab) -->
     <a href="{{ recipe.url }}" target="_blank">View Full Recipe</a>
 
+    <!-- Form to add the recipe to favorites -->
     <form action="{{ url_for('add_to_favorites', index=recipe.index) }}" method="post">
         <button type="submit">Add to Favorites</button>
     </form>
 
+    <!-- Form to add the recipe to the shopping list -->
     <form action="{{ url_for('add_to_shopping_list', index=recipe.index) }}" method="post">
         <button type="submit">Add to Shopping List</button>
     </form>

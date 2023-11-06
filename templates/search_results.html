@@ -3,6 +3,7 @@
 <head>
     <title>Search Results</title>
     <style>
+        /* Define CSS styles for recipe cards and details */
         .recipe-card {
             display: flex;
             border: 1px solid #ccc;
@@ -28,16 +29,21 @@
     
     <div class="recipe-list">
         {% for recipe in recipes | default([]) %}
+        <!-- Include a 'recipe_card.html' template for each recipe -->
             {% include 'recipe_card.html' %}
         <div class="recipe-card">
+            <!-- Display the recipe label or a default message if it's not available -->
             <h2>{{ recipe['label'] | default("Recipe Name Not Available") }}</h2>
+            <!-- Access 'cuisineType' and 'dishType' properties from 'recipe' object -->
             <p>Cuisine: {{ recipe.recipe.cuisineType }}</p>
             <p>Dish Type: {{ recipe.recipe.dishType }}</p>
+            <!-- Link to view recipe details with 'loop.index' as the index -->
             <a href="{{ url_for('recipe_details', index=loop.index) }}">View Details</a>
         </div>
         {% endfor %}
     </div>   
     
+    <!-- Link to go back to the home page -->
     <a href="{{ url_for('index') }}">Back to Home</a>
 </body>
 </html>

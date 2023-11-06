@@ -1,14 +1,20 @@
 <div class="recipe-card">
+    <!-- Recipe image -->
     <div class="recipe-image">
         <img src="{{ recipe.recipe.image }}" alt="{{ recipe.recipe.label }}">
     </div>
+    <!-- Recipe details -->
     <div class="recipe-details">
         <h2>{{ recipe.recipe.label }}</h2>
         <p>Cuisine: {{ recipe.recipe.cuisineType }}</p>
         <p>Cooking Time: {{ recipe.recipe.totalTime }} minutes</p>
+        <!-- Link to view detailed recipe -->
         <a href="{{ url_for('recipe_details', index=loop.index) }}">View Details</a>
+        <!-- Link to view full instructions on an external website (opens in a new tab) -->
         <a href="{{ recipe.recipe.url }}" target="_blank">View Instructions</a>
+        <!-- Button to add the recipe to favorites -->
         <button class="add-to-favorites" data-recipe-index="{{ loop.index }}">Add to Favorites</button>
+        <!-- Button to add the recipe to the shopping list -->
         <button class="add-to-shopping-list" data-recipe-index="{{ loop.index }}">Add to Shopping List</button>
     </div>
 </div>

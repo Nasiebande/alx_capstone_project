@@ -13,21 +13,32 @@
     <div class="container">
         <div class="recipe-details">
             <div class="recipe-image">
+                 <!-- Display the recipe image -->
                 <img src="{{ image_url }}" alt="{{ recipe['recipe']['label'] }}">
             </div>
             <h2>{{ recipe['hits'][index]['recipe']['label'] }}</h2>
             <p>Cuisine: {{ recipe['hits'][index]['recipe']['cuisineType'] }}</p>
             <p>Dish Type: {{ recipe['hits'][index]['recipe']['dishType'] }}</p>
+            <!-- Display the recipe image with the specified URL and alt text -->
             <img src="{{ recipe['hits'][index]['recipe']['image'] }}" alt="{{ recipe['hits'][index]['recipe']['label'] }}">
             <h3>Ingredients</h3>
             <ul>
+                <!-- List the ingredients of the recipe -->
                 {% for ingredient in recipe['hits'][index]['recipe']['ingredients'] %}
                 <li>{{ ingredient }}</li>
                 {% endfor %}
             </ul>
             <p>Recipe URL: <a href="{{ recipe['hits'][index]['recipe']['url'] }}" target="_blank">View Recipe</a></p>
-            <h4>Ratings and Reviews</h3>
-            <form method="POST" action="/add_review">
+            <!-- Provide a link to view the full recipe on an external website -->
+            <h4>Ratings and Reviews</h4>
+            <ul>
+                {% for review in reviews %}
+                    <li>{{ review.rating }}/5: {{ review.text }}</li>
+                {% endfor %}
+            </ul>
+            <!-- Form for submitting a new review -->
+            <h5>Submit a Review</h5>
+            <form action="{{ url_for('add_review', recipe_id=recipe.id) }}" method="post"></form>
                 <input type="hidden" name="recipe_id" value="{{ recipe_id }}">
                 <label for="rating">Rating (1-5):</label>
                 <input type="number" name="rating" min="1" max="5" required>
