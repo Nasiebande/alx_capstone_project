@@ -39,6 +39,19 @@ EDAMAM_APP_KEY = "cb1eb46dea31ba0c46fb7f96b463fb7d"
 # Initialize an empty list for recipes
 recipes = [] 
 
+recipe = {
+    'hits': [
+        {
+            'recipe': {
+                'label': 'Recipe Label',
+                'cuisineType': 'Cuisine Type',
+                'dishType': 'Dish Type',
+            }
+        },
+    ]
+}
+
+
 # Fetch recipes from Edamam or your source and populate the global recipes list
 def fetch_recipes_from_edamam():
     global recipes
@@ -94,7 +107,7 @@ def search():
 @app.route("/recipe/<int:index>")
 def recipe_details(index):
     if 0 < index <= len(recipes):
-        recipe = {'hits': [recipes[index]]}
+        recipe = recipes[index - 1]['recipe']
         image_url = recipe.get("recipe", {}).get("image", "")
         return render_template("recipe_detail.html", recipe=recipe, image_url=image_url)
     else:

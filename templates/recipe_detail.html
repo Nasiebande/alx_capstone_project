@@ -16,9 +16,9 @@
                  <!-- Display the recipe image -->
                 <img src="{{ image_url }}" alt="{{ recipe['recipe']['label'] }}">
             </div>
-            <h2>{{ recipe['hits'][index]['recipe']['label'] }}</h2>
-            <p>Cuisine: {{ recipe['hits'][index]['recipe']['cuisineType'] }}</p>
-            <p>Dish Type: {{ recipe['hits'][index]['recipe']['dishType'] }}</p>
+            <h2>{{ recipe['recipe']['label'] }}</h2>
+            <p>Cuisine: {{ recipe['recipe']['cuisineType'] }}</p>
+            <p>Dish Type: {{ recipe['recipe']['dishType'] }}</p>
             <!-- Display the recipe image with the specified URL and alt text -->
             <img src="{{ recipe['hits'][index]['recipe']['image'] }}" alt="{{ recipe['hits'][index]['recipe']['label'] }}">
             <h3>Ingredients</h3>
@@ -38,7 +38,7 @@
             </ul>
             <!-- Form for submitting a new review -->
             <h5>Submit a Review</h5>
-            <form action="{{ url_for('add_review', recipe_id=recipe.id) }}" method="post"></form>
+            <form action="{{ url_for('add_review', recipe_id=recipe_id) }}" method="post"></form>
                 <input type="hidden" name="recipe_id" value="{{ recipe_id }}">
                 <label for="rating">Rating (1-5):</label>
                 <input type="number" name="rating" min="1" max="5" required>
